@@ -10,12 +10,18 @@ img {
   height: auto;
 }
 
+/* One horizontal row (like the lab reference layout); scroll sideways on narrow viewports */
 .contact-form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: flex-end;
-  gap: 0.75rem 1rem;
+  gap: 1rem;
   margin-top: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
 }
 
 .contact-form label {
@@ -23,6 +29,16 @@ img {
   flex-direction: row;
   align-items: center;
   gap: 0.35rem;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.contact-form label.contact-field-body,
+.contact-form label:has(textarea) {
+  flex: 1 1 16rem;
+  min-width: 12rem;
+  white-space: normal;
+  align-items: flex-end;
 }
 
 .contact-form input,
@@ -30,8 +46,22 @@ img {
   font: inherit;
 }
 
+.contact-form input {
+  min-width: 10rem;
+}
+
 .contact-form textarea {
-  vertical-align: bottom;
-  min-height: 2.25rem;
+  width: 100%;
+  min-height: 3.5rem;
   resize: both;
+  vertical-align: bottom;
+}
+
+.contact-form button {
+  flex: 0 0 auto;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #f3f3f3;
+  cursor: pointer;
 }
