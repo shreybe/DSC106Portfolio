@@ -16,25 +16,56 @@
   </nav>
   <h1>Contact</h1>
 
-  <form
-    class="contact-form"
-    action="mailto:sbharathwajan@ucsd.edu"
-    method="POST"
-    enctype="text/plain"
-  >
+  <!-- Do not use action="mailto:..." — Chrome flags it as an insecure form target. Same behavior via script. -->
+  <form class="contact-form" id="contact-form" action="" method="get">
     <label>
       Email:
-      <input type="email" name="email" value="visitor@example.com">
+      <input type="email" name="email" required value="visitor@example.com" autocomplete="email">
     </label>
     <label>
       Subject:
-      <input name="subject" value="Hello from your portfolio site">
+      <input name="subject" required value="Hello from your portfolio site">
     </label>
     <label class="contact-field-body">
       Body:
-      <textarea name="body" rows="3" cols="28">I wanted to reach out about…</textarea>
+      <textarea name="body" rows="3" cols="28" required>I wanted to reach out about…</textarea>
     </label>
     <button>Submit</button>
   </form>
+
+  <script>
+    (function () {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        form.email.value = form.email.value.trim();
+        form.subject.value = form.subject.value.trim();
+        form.body.value = form.body.value.trim();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const email = form.email.value;
+        const subject = form.subject.value;
+        const body = form.body.value;
+
+        const to = 'sbharathwajan@ucsd.edu';
+        const params = new URLSearchParams();
+        params.set('subject', subject);
+        params.set('body', 'From: ' + email + '\n\n' + body);
+        const link = document.createElement('a');
+        link.href = 'mailto:' + to + '?' + params.toString();
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    })();
+  </script>
 </body>
 </html>
