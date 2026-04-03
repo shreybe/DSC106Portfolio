@@ -9,3 +9,29 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+.contact-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.contact-form label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  font: inherit;
+}
+
+.contact-form textarea {
+  vertical-align: bottom;
+  min-height: 2.25rem;
+  resize: both;
+}
