@@ -1,2 +1,2 @@
-# DSC106_-Portfolio-
+# DSC106_Portfolio
 Lab 1
