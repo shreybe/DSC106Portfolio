@@ -124,11 +124,12 @@ nav a.current {
   background: oklch(from var(--color-accent) 88% 12% h);
 }
 
-/* Projects grid */
+/* Projects grid (Step 4.2–4.3: responsive columns + row subgrid alignment) */
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
   gap: 1em;
+  align-items: start;
 }
 
 .projects article {
@@ -137,14 +138,18 @@ nav a.current {
   grid-row: span 3;
 }
 
-.projects h2 {
+.projects article h2 {
   margin: 0;
 }
 
-.projects img {
+.projects article img {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.projects article p {
+  margin: 0;
 }
 
 /* CV page */
