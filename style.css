@@ -1,6 +1,7 @@
 /* Lab 2: document accent and form controls */
 :root {
   --color-accent: oklch(65% 50% 0);
+  --theme-control-width: 16rem;
 }
 
 html {
@@ -24,6 +25,11 @@ body {
   z-index: 10;
   font-size: 80%;
   white-space: nowrap;
+  width: var(--theme-control-width);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .color-scheme select {
@@ -64,7 +70,7 @@ nav {
   --border-color: oklch(50% 10% 200 / 40%);
   display: flex;
   margin-bottom: 1em;
-  padding-right: 14rem;
+  padding-right: calc(var(--theme-control-width) + 1rem);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -92,6 +98,10 @@ nav a.current {
   nav {
     padding-right: 0;
     margin-top: 2.75rem;
+  }
+
+  .color-scheme {
+    width: auto;
   }
 }
 
