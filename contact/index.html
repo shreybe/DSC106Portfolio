@@ -7,15 +7,6 @@
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><a href="../">Home</a></li>
-      <li><a href="../projects/">Projects</a></li>
-      <li><a href="../cv/">CV</a></li>
-      <li><a href="./" class="current">Contact</a></li>
-      <li><a href="https://github.com/shreybe" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-    </ul>
-  </nav>
   <h1>Contact</h1>
 
   <!-- Do not use action="mailto:..." — Chrome flags it as an insecure form target. Same behavior via script. -->
@@ -35,39 +26,6 @@
     <button type="submit">Submit</button>
   </form>
 
-  <script>
-    (function () {
-      const form = document.getElementById('contact-form');
-      if (!form) return;
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        form.email.value = form.email.value.trim();
-        form.subject.value = form.subject.value.trim();
-        form.body.value = form.body.value.trim();
-
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
-
-        const email = form.email.value;
-        const subject = form.subject.value;
-        const body = form.body.value;
-
-        const to = 'sbharathwajan@ucsd.edu';
-        const params = new URLSearchParams();
-        params.set('subject', subject);
-        params.set('body', 'From: ' + email + '\n\n' + body);
-        const link = document.createElement('a');
-        link.href = 'mailto:' + to + '?' + params.toString();
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-    })();
-  </script>
+  <script type="module" src="../global.js"></script>
 </body>
 </html>

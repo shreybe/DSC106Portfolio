@@ -4,14 +4,29 @@
 }
 
 html {
+  color-scheme: light dark;
   accent-color: var(--color-accent);
 }
 
 body {
+  position: relative;
   font: 100%/1.5 system-ui;
   max-width: 100ch;
   margin-inline: auto;
   padding-inline: 1em;
+}
+
+/* Lab 3: theme switcher (Step 4.3) */
+.color-scheme {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  font-size: 80%;
+}
+
+.color-scheme select {
+  font: inherit;
 }
 
 /* Stronger centering when viewport is wide (optional alternative shown in lab) */
@@ -43,16 +58,12 @@ img {
   display: block;
 }
 
-/* Navigation */
-nav ul,
-nav li {
-  display: contents;
-}
-
+/* Navigation (Lab 3: links injected by global.js; no ul/li) */
 nav {
+  --border-color: oklch(50% 10% 200 / 40%);
   display: flex;
   margin-bottom: 1em;
-  border-bottom: 1px solid oklch(80% 3% 200);
+  border-bottom: 1px solid var(--border-color);
 }
 
 nav a {
@@ -68,7 +79,7 @@ nav a {
 
 nav a:hover {
   border-bottom-color: var(--color-accent);
-  background-color: oklch(from var(--color-accent) 95% 5% h);
+  background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
 }
 
 nav a.current {
@@ -95,7 +106,8 @@ nav a.current {
 
 .contact-form input,
 .contact-form textarea,
-.contact-form button {
+.contact-form button,
+.contact-form select {
   font: inherit;
 }
 
@@ -114,7 +126,7 @@ nav a.current {
 .contact-form button {
   justify-self: start;
   padding: 0.35em 1em;
-  border: 1px solid oklch(80% 3% 200);
+  border: 1px solid oklch(50% 10% 200 / 40%);
   border-radius: 4px;
   background: oklch(from var(--color-accent) 96% 8% h);
   cursor: pointer;
