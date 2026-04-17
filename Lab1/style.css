@@ -1,0 +1,202 @@
+/* Lab 2: document accent and form controls */
+:root {
+  --color-accent: oklch(65% 50% 0);
+}
+
+html {
+  color-scheme: light dark;
+  accent-color: var(--color-accent);
+}
+
+body {
+  position: relative;
+  font: 100%/1.5 system-ui;
+  max-width: 100ch;
+  margin-inline: auto;
+  padding-inline: 1em;
+}
+
+/* Lab 3: theme switcher (Step 4.3) */
+.color-scheme {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  font-size: 80%;
+}
+
+.color-scheme select {
+  font: inherit;
+}
+
+/* Stronger centering when viewport is wide (optional alternative shown in lab) */
+/* margin-inline: max(1em, (100% - 100ch) / 2); */
+
+h1 {
+  font-size: 400%;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.profile-photo {
+  max-width: min(100%, 18rem);
+  height: auto;
+  display: block;
+}
+
+/* Navigation (Lab 3: links injected by global.js; no ul/li) */
+nav {
+  --border-color: oklch(50% 10% 200 / 40%);
+  display: flex;
+  margin-bottom: 1em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+nav a {
+  flex: 1;
+  padding: 0.5em;
+  padding-bottom: calc(0.5em - 0.4em);
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+  border-bottom: 0.4em solid transparent;
+}
+
+nav a:hover {
+  border-bottom-color: var(--color-accent);
+  background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
+}
+
+nav a.current {
+  border-bottom-color: oklch(85% 2% 200);
+}
+
+/* Contact form — grid + subgrid */
+.contact-form {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+  margin-top: 0.5rem;
+}
+
+.contact-form label {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.contact-form button {
+  grid-column: 1 / -1;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form button,
+.contact-form select {
+  font: inherit;
+}
+
+.contact-form input,
+.contact-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.contact-form textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.contact-form button {
+  justify-self: start;
+  padding: 0.35em 1em;
+  border: 1px solid oklch(50% 10% 200 / 40%);
+  border-radius: 4px;
+  background: oklch(from var(--color-accent) 96% 8% h);
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  background: oklch(from var(--color-accent) 88% 12% h);
+}
+
+/* Projects grid (Step 4.2–4.3: responsive columns + row subgrid alignment) */
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  gap: 1em;
+  align-items: start;
+}
+
+.projects article {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+}
+
+.projects article h2 {
+  margin: 0;
+}
+
+.projects article img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.projects article p {
+  margin: 0;
+}
+
+/* CV page */
+body.cv-page {
+  padding-block: 0 2rem;
+}
+
+body.cv-page > section {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid oklch(92% 2% 220);
+}
+
+body.cv-page > section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+body.cv-page h2 {
+  margin-top: 0;
+  color: oklch(35% 8% 250);
+  border-inline-start: 0.25em solid var(--color-accent);
+  padding-inline-start: 0.5em;
+}
+
+body.cv-page article header h3 {
+  margin-bottom: 0.25em;
+}
+
+body.cv-page article header p {
+  margin-top: 0;
+  font-size: 0.95em;
+  color: oklch(40% 4% 250);
+}
+
+body.cv-page #links a {
+  color: var(--color-accent);
+}
