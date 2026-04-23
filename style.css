@@ -164,13 +164,15 @@ nav a.current {
 }
 
 .projects article {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
 }
 
 .projects article h2 {
   margin: 0;
+  font-size: 1.5rem;
 }
 
 .projects article img {

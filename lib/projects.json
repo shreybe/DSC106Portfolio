@@ -1,73 +1,73 @@
 [
   {
     "title": "Storms, States, and Severity: U.S. Major Power Outages",
-    "year": "2026",
+    "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Major U.S. power outages (2000–2016): how climate region and outage cause relate to duration, missingness in demand loss, hypothesis tests, and baseline and random-forest models with a fairness check across regions."
   },
   {
     "title": "miR-214 Targeting of TFDP1 and AIFM2",
-    "year": "2025",
+    "year": 2025,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Briganti Lab project testing whether miR-214 regulates TFDP1 and AIFM2 via 3' UTR response elements using luciferase reporters, transfection, and protein validation."
   },
   {
     "title": "Lab 1 Portfolio Website",
-    "year": "2026",
+    "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Built and published a multi-page personal website with semantic HTML, responsive CSS, and a working contact workflow."
   },
   {
     "title": "Lab 2 Styling and Layout System",
-    "year": "2026",
+    "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Added reusable design tokens, responsive navigation, project cards, and improved form styling with grid-based layout."
   },
   {
     "title": "Lab 3 Theme and Navigation Enhancements",
-    "year": "2026",
+    "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Implemented automatic and user-selected color scheme controls with persistent localStorage preferences and generated navigation links."
   },
   {
     "title": "DSC 10 Exploratory Data Report",
-    "year": "2024",
+    "year": 2024,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Analyzed a real-world dataset in Python with cleaning, summary tables, and visualizations to communicate key trends."
   },
   {
     "title": "DSC 20 Program Design Project",
-    "year": "2024",
+    "year": 2024,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Designed and tested modular Python code for a larger assignment using helper functions and decomposition."
   },
   {
     "title": "DSC 30 Data Structures Practice",
-    "year": "2025",
+    "year": 2025,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Implemented and benchmarked core data structures, then compared algorithmic performance across input sizes."
   },
   {
     "title": "DSC 40A Linear Models Notebook",
-    "year": "2025",
+    "year": 2025,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Built regression workflows and interpreted model diagnostics to connect mathematical assumptions to prediction quality."
   },
   {
     "title": "DSC 80 Reproducible Data Pipeline",
-    "year": "2026",
+    "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Created a reproducible pipeline for cleaning, testing hypotheses, and modeling with transparent notebook documentation."
   },
   {
     "title": "Molecular Biology Skills Portfolio",
-    "year": "2025",
+    "year": 2025,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Documented PCR, gel electrophoresis, cloning, transformation, and western blot workflows from lab training."
   },
   {
     "title": "Git and GitHub Workflow Practice",
-    "year": "2024",
+    "year": 2024,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Practiced branching, pull requests, and commit hygiene while maintaining a clean history across iterative website labs."
   }
