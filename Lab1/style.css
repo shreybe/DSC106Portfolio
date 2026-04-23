@@ -183,6 +183,38 @@ nav a.current {
   margin: 0;
 }
 
+.projects .project-year {
+  margin: 0;
+  font-weight: 600;
+  color: oklch(45% 4% 220);
+}
+
+#profile-stats {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid oklch(85% 2% 220);
+  border-radius: 8px;
+}
+
+#profile-stats dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  gap: 0.25rem 1rem;
+}
+
+#profile-stats dt {
+  grid-row: 1;
+  margin: 0;
+  font-weight: 600;
+}
+
+#profile-stats dd {
+  grid-row: 2;
+  margin: 0;
+  font-size: 1.3rem;
+}
+
 /* CV page */
 body.cv-page {
   padding-block: 0 2rem;
