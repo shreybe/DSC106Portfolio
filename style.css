@@ -147,12 +147,18 @@ nav a.current {
   padding: 0.35em 1em;
   border: 1px solid oklch(50% 10% 200 / 40%);
   border-radius: 4px;
-  background: oklch(from var(--color-accent) 96% 8% h);
+  background: var(--color-accent);
+  color: white;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .contact-form button:hover {
-  background: oklch(from var(--color-accent) 88% 12% h);
+  background: oklch(from var(--color-accent) 58% c h);
+}
+
+.contact-form button:disabled {
+  opacity: 0.65;
 }
 
 /* Projects grid (Step 4.2–4.3: responsive columns + row subgrid alignment) */

@@ -80,11 +80,11 @@ contactForm?.addEventListener('submit', (event) => {
     return;
   }
   const data = new FormData(form);
-  const to = 'sbharathwajan@ucsd.edu';
   const email = data.get('email');
+  const to = email;
   const subject = data.get('subject');
   const body = data.get('body');
-  const mailBody = `${email}\n\n${body}`;
+  const mailBody = `${body}`;
 
   const link = document.createElement('a');
   link.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`;
