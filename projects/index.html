@@ -8,6 +8,19 @@
 </head>
 <body>
   <h1 class="projects-title">My Projects</h1>
+
+  <div class="projects-viz">
+    <svg id="projects-pie-plot" viewBox="-50 -50 100 100" aria-label="Projects by year pie chart"></svg>
+    <ul class="legend" aria-label="Projects by year legend"></ul>
+  </div>
+
+  <input
+    class="searchBar"
+    type="search"
+    aria-label="Search projects"
+    placeholder="Search projects..."
+  >
+
   <div class="projects"></div>
 
   <script type="module" src="../global.js"></script>
