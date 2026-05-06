@@ -2,6 +2,9 @@
  * DSC 106 Project 3 — D3-only interactive MODIS / FIRMS hotspot explorer.
  */
 (function () {
+  const MAP_WIDTH = 1400;
+  const MAP_HEIGHT = 760;
+
   const parseDate = d3.timeParse("%Y-%m-%d");
   const fmtDate = d3.timeFormat("%b %-d, %Y");
   const fmtShort = d3.timeFormat("%b %-d");
@@ -73,14 +76,14 @@
     svg.selectAll("*").remove();
     const defs = svg.append("defs");
     const filter = defs.append("filter").attr("id", "spark-glow").attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
-    filter.append("feGaussianBlur").attr("stdDeviation", "1.4").attr("result", "blur");
+    filter.append("feGaussianBlur").attr("stdDeviation", "2").attr("result", "blur");
     const merge = filter.append("feMerge");
     merge.append("feMergeNode").attr("in", "blur");
     merge.append("feMergeNode").attr("in", "SourceGraphic");
 
     const root = svg.append("g").attr("class", "map-root");
     const statesFeat = topojson.feature(state.geo, state.geo.objects.states);
-    state.projection = d3.geoAlbersUsa().fitSize([960, 560], statesFeat);
+    state.projection = d3.geoAlbersUsa().fitSize([MAP_WIDTH, MAP_HEIGHT], statesFeat);
     state.path = d3.geoPath(state.projection);
 
     root
@@ -94,7 +97,7 @@
     root.append("path").datum(topojson.mesh(state.geo, state.geo.objects.states, (a, b) => a !== b)).attr("class", "state-boundary").attr("d", state.path);
 
     const maxFrp = d3.max(state.raw, (d) => d.frp) || 1;
-    const rScale = d3.scaleSqrt().domain([0, maxFrp]).range([1.1, 5]);
+    const rScale = d3.scaleSqrt().domain([0, maxFrp]).range([2.2, 10]);
 
     root
       .append("g")
