@@ -82,8 +82,8 @@
   }
 
   function measureMapLogicalSize() {
-    const el = document.querySelector("#map-svg");
-    const box = el?.getBoundingClientRect?.();
+    const stage = document.querySelector(".map-stage");
+    const box = stage?.getBoundingClientRect?.();
     const w = Math.max(MAP_BASE.width, Math.floor(box?.width || MAP_BASE.width));
     const h = Math.max(MAP_BASE.height, Math.floor(box?.height || MAP_BASE.height));
     return [w, h];
@@ -152,8 +152,10 @@
     const canvas = document.getElementById("map-canvas");
     if (!canvas || !ctx) return;
 
-    const w = canvas.clientWidth || MAP_BASE.width;
-    const h = canvas.clientHeight || MAP_BASE.height;
+    const lw = +canvas.dataset.logicalW || canvas.clientWidth || MAP_BASE.width;
+    const lh = +canvas.dataset.logicalH || canvas.clientHeight || MAP_BASE.height;
+    const w = lw;
+    const h = lh;
     const dpr = window.devicePixelRatio || 1;
     syncCanvasSize(canvas, w, h, dpr);
 
@@ -167,11 +169,37 @@
     ctx.scale(t.k, t.k);
 
     for (const p of state.firesProjected) {
+      const halo = ctx.createRadialGradient(p.x, p.y + p.r * 0.35, p.r * 0.25, p.x, p.y, p.r * 3.4);
+      halo.addColorStop(0, "rgba(255,210,140,0.52)");
+      halo.addColorStop(0.35, "rgba(255,180,70,0.22)");
+      halo.addColorStop(1, "rgba(255,170,60,0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 3.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y + p.r * 0.12, p.r * 1.06, 0, Math.PI * 2);
+      ctx.globalAlpha = 0.42;
+      ctx.fillStyle = "rgba(10,12,22,0.72)";
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.globalAlpha = 0.92;
-      ctx.fillStyle = p.col.formatRgb();
+      ctx.globalAlpha = 0.93;
+      const mid = d3.rgb(p.col);
+      mid.opacity = 0.95;
+      const edge = p.col.darker(0.25);
+      const lum = ctx.createRadialGradient(p.x - p.r * 0.35, p.y - p.r * 0.35, p.r * 0.05, p.x, p.y, p.r * 1.05);
+      lum.addColorStop(0, `rgba(255,255,255,0.55)`);
+      lum.addColorStop(0.35, mid.formatRgb());
+      lum.addColorStop(1, edge.formatRgb());
+      ctx.fillStyle = lum;
       ctx.fill();
+      ctx.strokeStyle = "rgba(0,0,0,0.42)";
+      ctx.lineWidth = 1.1 / t.k;
+      ctx.stroke();
       ctx.globalAlpha = 1;
     }
 
