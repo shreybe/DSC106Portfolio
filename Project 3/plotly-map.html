@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MODIS Wildfire Hotspots — Plotly Map</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+        background: #080a12;
+        color: #f3f2ef;
+      }
+      .wrap {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 18px;
+      }
+      h1 {
+        margin: 0 0 12px 0;
+        font-size: 1.4rem;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .control {
+        background: #10131e;
+        border: 1px solid #1d2233;
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .control label,
+      .control strong {
+        font-size: 0.85rem;
+      }
+      .control input[type="range"] {
+        width: 100%;
+      }
+      .map-layout {
+        display: grid;
+        grid-template-columns: 1fr 290px;
+        gap: 12px;
+      }
+      #plotly-map {
+        background: #0b0f19;
+        border: 1px solid #1d2233;
+        border-radius: 12px;
+        min-height: 560px;
+      }
+      .detail {
+        background: #10131e;
+        border: 1px solid #1d2233;
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .detail h2 {
+        margin: 0 0 10px 0;
+        font-size: 1rem;
+      }
+      .detail p,
+      .detail dd,
+      .detail dt {
+        margin: 0;
+        font-size: 0.85rem;
+      }
+      .detail dl {
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .muted {
+        color: #9a958c;
+      }
+      @media (max-width: 1000px) {
+        .map-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>MODIS hotspots map (Plotly)</h1>
+      <div class="controls">
+        <div class="control">
+          <strong>Acquisition date range</strong>
+          <div id="date-label" class="muted"></div>
+          <label for="date-min">Start</label>
+          <input id="date-min" type="range" />
+          <label for="date-max">End</label>
+          <input id="date-max" type="range" />
+        </div>
+        <div class="control">
+          <label for="confidence"><strong>Minimum confidence (%)</strong></label>
+          <div id="conf-label" class="muted"></div>
+          <input id="confidence" type="range" min="0" max="100" step="5" value="0" />
+        </div>
+        <div class="control">
+          <strong>Pass</strong>
+          <div>
+            <label><input type="checkbox" id="allow-day" checked /> Day</label>
+          </div>
+          <div>
+            <label><input type="checkbox" id="allow-night" checked /> Night</label>
+          </div>
+        </div>
+        <div class="control">
+          <button id="btn-reset" type="button">Reset all filters</button>
+        </div>
+      </div>
+      <div class="map-layout">
+        <div id="plotly-map"></div>
+        <aside class="detail">
+          <h2>Details on demand</h2>
+          <p id="detail-empty" class="muted">Click a spark to inspect one hotspot.</p>
+          <dl id="detail-list" hidden></dl>
+        </aside>
+      </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="js/fire-data.js"></script>
+    <script src="js/plotly-map.js"></script>
+  </body>
+</html>
