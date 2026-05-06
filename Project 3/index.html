@@ -17,7 +17,7 @@
     <section id="interactive" class="fullscreen-map" aria-label="Full-screen wildfire map">
       <header class="map-chrome-head">
         <span class="tag">MODIS · FIRMS hotspots</span>
-        <span class="chrome-hint">Scroll to zoom · drag map to pan · click a spark</span>
+        <span class="chrome-hint">Globe-style shading · scroll to zoom · drag to pan · click a spark</span>
       </header>
       <div class="controls">
         <div class="control">
@@ -51,8 +51,9 @@
             id="map-svg"
             viewBox="0 0 2800 1520"
             preserveAspectRatio="xMidYMid meet"
-            aria-label="Map of United States with fire sparks"
+            aria-label="United States basemap for wildfire hotspots"
           ></svg>
+          <canvas id="map-canvas" aria-hidden="true"></canvas>
         </div>
         <aside class="detail-panel" id="detail-panel">
           <h3>Details on demand</h3>
