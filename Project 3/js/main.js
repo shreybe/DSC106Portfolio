@@ -2,8 +2,7 @@
  * DSC 106 Project 3 — D3-only interactive MODIS / FIRMS hotspot explorer.
  */
 (function () {
-  const MAP_WIDTH = 1400;
-  const MAP_HEIGHT = 760;
+  const MAP_BASE = { width: 2800, height: 1520 };
 
   const parseDate = d3.timeParse("%Y-%m-%d");
   const fmtDate = d3.timeFormat("%b %-d, %Y");
@@ -71,9 +70,26 @@
     dl.innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
   }
 
+  function measureMapSize() {
+    const el = document.querySelector("#map-svg");
+    const box = el?.getBoundingClientRect?.();
+    const w = Math.max(MAP_BASE.width, Math.floor(box?.width || MAP_BASE.width));
+    const h = Math.max(MAP_BASE.height, Math.floor(box?.height || MAP_BASE.height));
+    return [w, h];
+  }
+
   function setupMap(firesFiltered) {
     const svg = d3.select("#map-svg");
     svg.selectAll("*").remove();
+
+    const domSvg = svg.node();
+    const [mw, mh] = measureMapSize();
+    svg.attr("viewBox", `0 0 ${mw} ${mh}`);
+    if (domSvg) {
+      domSvg.setAttribute("width", String(mw));
+      domSvg.setAttribute("height", String(mh));
+    }
+
     const defs = svg.append("defs");
     const filter = defs.append("filter").attr("id", "spark-glow").attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
     filter.append("feGaussianBlur").attr("stdDeviation", "2").attr("result", "blur");
@@ -83,7 +99,7 @@
 
     const root = svg.append("g").attr("class", "map-root");
     const statesFeat = topojson.feature(state.geo, state.geo.objects.states);
-    state.projection = d3.geoAlbersUsa().fitSize([MAP_WIDTH, MAP_HEIGHT], statesFeat);
+    state.projection = d3.geoAlbersUsa().fitSize([mw, mh], statesFeat);
     state.path = d3.geoPath(state.projection);
 
     root
@@ -132,6 +148,8 @@
         })
     );
 
+    svg.on("dblclick.zoom", null);
+
     svg.on("click", () => {
       state.selected = null;
       root.selectAll("circle.spark-dot").classed("selected", false);
@@ -147,7 +165,10 @@
       "date-label"
     ).textContent = `${fmtShort(state.dates[state.minDateIdx])} → ${fmtShort(state.dates[state.maxDateIdx])}`;
     document.getElementById("conf-label").textContent = `${state.minConf}%`;
-    document.querySelector("#interactive h2").textContent = `Interactive map · ${filtered.length} of ${state.raw.length} detections`;
+    const stats = document.querySelector("#map-stats");
+    if (stats) {
+      stats.textContent = `${filtered.length} / ${state.raw.length} hotspots shown`;
+    }
   }
 
   async function init() {
@@ -233,6 +254,12 @@
     });
 
     refresh();
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      if (resizeTimer) window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => refresh(), 120);
+    });
   }
 
   init().catch((err) => {
