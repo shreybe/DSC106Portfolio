@@ -1,5 +1,13 @@
 [
   {
+    "title": "DSC 106 Project 3 — MODIS Wildfire Hotspots",
+    "year": 2026,
+    "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+    "description": "Interactive U.S. map of NASA FIRMS MODIS_NRT fire hotspot detections; pan/zoom, click to highlight, and filter by date, confidence, and day/night pass.",
+    "link": "Project%203/index.html",
+    "linkText": "Open wildfire map"
+  },
+  {
     "title": "Storms, States, and Severity: U.S. Major Power Outages",
     "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",

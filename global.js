@@ -128,12 +128,24 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     const image = project.image ?? 'https://vis-society.github.io/labs/2/images/empty.svg';
     const description = project.description ?? 'No description provided yet.';
     const year = project.year ? `<p class="project-year">${project.year}</p>` : '';
+    const rawLink = typeof project.link === 'string' ? project.link.trim() : '';
+    const linkHref =
+      rawLink && !rawLink.startsWith('http') ? `${BASE_PATH}${rawLink.replace(/^\//, '')}` : rawLink;
+    const linkText =
+      typeof project.linkText === 'string' && project.linkText.trim()
+        ? project.linkText.trim()
+        : 'Open project';
+    const linkBlock =
+      rawLink && linkHref
+        ? `<p class="project-link"><a href="${linkHref}" target="_blank" rel="noopener noreferrer">${linkText}</a></p>`
+        : '';
 
     article.innerHTML = `
       <${headingTag}>${title}</${headingTag}>
       <img src="${image}" alt="${title}">
       <div class="project-content">
         <p>${description}</p>
+        ${linkBlock}
         ${year}
       </div>
     `;
