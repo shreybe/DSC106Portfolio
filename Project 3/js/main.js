@@ -84,8 +84,12 @@
   function measureMapLogicalSize() {
     const stage = document.querySelector(".map-stage");
     const box = stage?.getBoundingClientRect?.();
-    const w = Math.max(MAP_BASE.width, Math.floor(box?.width || MAP_BASE.width));
-    const h = Math.max(MAP_BASE.height, Math.floor(box?.height || MAP_BASE.height));
+    let w = Math.round(box?.width ?? 0);
+    let h = Math.round(box?.height ?? 0);
+    if (w < 16 || h < 16) {
+      w = MAP_BASE.width;
+      h = MAP_BASE.height;
+    }
     return [w, h];
   }
 
@@ -102,8 +106,8 @@
       canvas.width = ww;
       canvas.height = hh;
     }
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
+    canvas.style.removeProperty("width");
+    canvas.style.removeProperty("height");
   }
 
   function buildProjectionPath(mw, mh) {
@@ -115,26 +119,50 @@
 
   function drawBasemap(svgRoot, path, statesFeat, mw, mh) {
     svgRoot.selectAll("*").remove();
+    svgRoot.attr("viewBox", `0 0 ${mw} ${mh}`);
+    /** Keep display size purely from CSS (#map-svg { width:100%; height:100% }) so canvas/SVG pixels match. */
+    svgRoot.attr("preserveAspectRatio", "xMidYMid meet");
 
-    const domSvg = svgRoot.node();
-    if (domSvg) {
-      svgRoot.attr("viewBox", `0 0 ${mw} ${mh}`);
-      domSvg.setAttribute("width", String(mw));
-      domSvg.setAttribute("height", String(mh));
-    }
+    const defs = svgRoot.append("defs");
 
-    svgRoot
-      .append("g")
-      .attr("class", "map-root")
+    const oceanGrad = defs
+      .append("linearGradient")
+      .attr("id", "map-ocean-fill")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0)
+      .attr("y1", 0)
+      .attr("x2", mw)
+      .attr("y2", mh);
+    oceanGrad.append("stop").attr("offset", "0%").attr("stop-color", "#2874a6");
+    oceanGrad.append("stop").attr("offset", "45%").attr("stop-color", "#1a5270");
+    oceanGrad.append("stop").attr("offset", "100%").attr("stop-color", "#0e3148");
+
+    const landGrad = defs
+      .append("radialGradient")
+      .attr("id", "map-land-fill")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("cx", mw * 0.42)
+      .attr("cy", mh * 0.42)
+      .attr("r", Math.max(mw, mh) * 0.72);
+    landGrad.append("stop").attr("offset", "0%").attr("stop-color", "#dde8cf");
+    landGrad.append("stop").attr("offset", "40%").attr("stop-color", "#aecfa0");
+    landGrad.append("stop").attr("offset", "72%").attr("stop-color", "#93b883");
+    landGrad.append("stop").attr("offset", "100%").attr("stop-color", "#7da06d");
+
+    svgRoot.append("rect").attr("class", "map-ocean").attr("width", mw).attr("height", mh).attr("fill", "url(#map-ocean-fill)");
+
+    const root = svgRoot.append("g").attr("class", "map-root");
+    root
       .append("path")
       .datum(statesFeat)
       .attr("class", "states-fill")
       .attr("d", path)
-      .attr("fill", "#15151d")
-      .attr("stroke", "none");
+      .attr("fill", "url(#map-land-fill)")
+      .attr("stroke", "#4d7348")
+      .attr("stroke-width", 0.45)
+      .attr("stroke-opacity", 0.9);
 
-    svgRoot
-      .select("g.map-root")
+    root
       .append("path")
       .datum(topojson.mesh(state.geo, state.geo.objects.states, (a, b) => a !== b))
       .attr("class", "state-boundary")
@@ -179,9 +207,9 @@
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(p.x, p.y + p.r * 0.12, p.r * 1.06, 0, Math.PI * 2);
-      ctx.globalAlpha = 0.42;
-      ctx.fillStyle = "rgba(10,12,22,0.72)";
+      ctx.arc(p.x, p.y + p.r * 0.08, p.r * 0.92, 0, Math.PI * 2);
+      ctx.globalAlpha = 0.38;
+      ctx.fillStyle = "rgba(18,52,74,0.55)";
       ctx.fill();
       ctx.globalAlpha = 1;
 

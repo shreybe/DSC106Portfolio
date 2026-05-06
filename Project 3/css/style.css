@@ -224,8 +224,9 @@ button.active {
 
 .state-boundary {
   fill: none;
-  stroke: #3a3a48;
-  stroke-width: 0.6;
+  stroke: rgba(62, 90, 58, 0.95);
+  stroke-width: 0.55;
+  stroke-opacity: 0.9;
 }
 
 .detail-panel {

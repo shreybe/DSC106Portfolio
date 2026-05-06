@@ -123,9 +123,8 @@ body {
   align-items: stretch;
   justify-content: stretch;
   background:
-    radial-gradient(ellipse 140% 100% at 50% 112%, rgba(20, 32, 58, 0.35) 0%, transparent 45%),
-    radial-gradient(120% 90% at 50% -8%, rgba(255, 255, 255, 0.04) 0%, transparent 42%),
-    linear-gradient(175deg, #0c111d 0%, #060712 52%, #04050c 100%);
+    radial-gradient(ellipse 130% 90% at 50% 120%, rgba(40, 120, 165, 0.28) 0%, transparent 55%),
+    linear-gradient(180deg, #1a4a66 0%, #143d56 42%, #0f2f44 100%);
 }
 
 /* Flat stack: SVG + canvas share the same box (no 3D tilt). */
