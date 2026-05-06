@@ -18,20 +18,25 @@ body {
 }
 
 .map-chrome-head {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
+  flex-shrink: 0;
   z-index: 6;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
   padding: 0.65rem 1rem 0.75rem;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(6, 8, 14, 0.92) 0%, rgba(6, 8, 14, 0) 100%);
-  border-bottom: 1px solid rgba(42, 42, 54, 0.5);
+  background: #0d0f17;
+  border-bottom: 1px solid var(--border);
+}
+
+.chrome-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+  min-width: min(100%, 22rem);
+  max-width: 36rem;
 }
 
 .chrome-title {
@@ -93,13 +98,18 @@ body {
   letter-spacing: 0.02em;
 }
 
-.fullscreen-map > .map-layout {
+.fullscreen-map .map-body {
   flex: 1;
   min-height: 0;
+  position: relative;
+}
+
+.fullscreen-map .map-body > .map-layout {
+  position: absolute;
+  inset: 0;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
-  position: relative;
 }
 
 #map-wrap {
@@ -118,21 +128,13 @@ body {
     linear-gradient(175deg, #0c111d 0%, #060712 52%, #04050c 100%);
 }
 
-/* Globe-style tilt applies to BOTH basemap + canvas so points stay glued to geography */
+/* Flat stack: SVG + canvas share the same box (no 3D tilt). */
 .map-stage {
   position: absolute;
-  inset: 4% 3%;
-  perspective: 1800px;
-  transform-style: preserve-3d;
-  transform: rotateX(9deg) rotateZ(-1deg);
-  transform-origin: 50% 55%;
+  inset: 0;
 }
 
 @media (max-width: 880px) {
-  .map-stage {
-    inset: 10% 2% 12%;
-  }
-
   .map-chrome-head {
     padding-top: 0.5rem;
   }
@@ -148,19 +150,6 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-}
-
-#map-wrap::after {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background:
-    radial-gradient(ellipse at 35% 18%, rgba(255, 255, 255, 0.09), transparent 48%),
-    radial-gradient(ellipse at 76% 88%, rgba(0, 0, 0, 0.5), transparent 52%);
-  mix-blend-mode: soft-light;
-  opacity: 0.55;
 }
 
 #map-wrap #map-svg {
@@ -180,12 +169,11 @@ body {
 
 .fullscreen-map .detail-panel {
   position: absolute;
-  top: 4.75rem;
+  top: 0.75rem;
   right: 0.75rem;
   z-index: 4;
   width: min(372px, calc(100vw - 1.5rem));
-  max-height: calc(100vh - 5rem - min(36vh, 240px));
-  max-height: calc(100dvh - 5rem - min(36vh, 240px));
+  max-height: calc(100% - 1.25rem);
   overflow-y: auto;
   min-height: 0;
   background: rgba(14, 16, 26, 0.96);
@@ -227,23 +215,18 @@ body {
   line-height: 1.5;
 }
 
-.map-legend {
-  position: absolute;
-  left: 0.75rem;
-  top: calc(4.75rem + 0.15rem);
-  z-index: 4;
+.map-chrome-head .map-legend {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   grid-template-rows: auto auto;
   gap: 0.2rem 0.5rem;
   align-items: center;
   pointer-events: none;
-  padding: 0.5rem 0.65rem 0.55rem;
-  border-radius: 10px;
-  background: rgba(12, 14, 22, 0.88);
-  border: 1px solid rgba(60, 66, 90, 0.85);
-  backdrop-filter: blur(8px);
-  max-width: min(320px, calc(100vw - 8rem));
+  padding: 0.45rem 0.6rem 0.5rem;
+  border-radius: 8px;
+  background: #12141e;
+  border: 1px solid var(--border);
+  max-width: min(100%, 20rem);
 }
 
 .legend-title {
@@ -316,10 +299,11 @@ body {
     max-width: calc(100vw - 1rem);
   }
 
-  .map-legend {
-    top: calc(6.75rem + 0.75rem + 48px * 3);
-    left: 0.5rem;
-    right: 0.5rem;
+  .chrome-cluster {
+    max-width: none;
+  }
+
+  .map-chrome-head .map-legend {
     max-width: none;
   }
 
