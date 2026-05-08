@@ -345,3 +345,142 @@ body.cv-page #links a {
     flex-direction: column;
   }
 }
+
+/* Lab 6: meta page — stats, scatter plot, tooltip, brush */
+body.meta-page #stats {
+  margin-block: 1rem 1.5rem;
+}
+
+body.meta-page #stats dl.stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.25rem;
+  row-gap: 0.35rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid oklch(85% 2% 220);
+  border-radius: 8px;
+  max-width: 42rem;
+}
+
+body.meta-page #stats dl.stats dt {
+  margin: 0;
+  font-weight: 600;
+  color: oklch(42% 5% 250);
+}
+
+body.meta-page #stats dl.stats dd {
+  margin: 0;
+}
+
+body.meta-page #chart {
+  width: 100%;
+  max-width: min(100%, 72rem);
+  margin-block: 0.5rem 1rem;
+}
+
+body.meta-page .meta-scatter-svg .gridlines line {
+  stroke: oklch(75% 4% 240);
+  stroke-opacity: 0.45;
+}
+
+body.meta-page .meta-scatter-svg .gridlines path.domain {
+  display: none;
+}
+
+body.meta-page .meta-scatter-svg circle {
+  transition: 200ms;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+body.meta-page .meta-scatter-svg circle:hover {
+  transform: scale(1.5);
+}
+
+body.meta-page .meta-scatter-svg circle.selected {
+  fill: #ff6b6b;
+}
+
+@keyframes marching-ants {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+body.meta-page .selection {
+  fill-opacity: 0.1;
+  stroke: black;
+  stroke-opacity: 0.7;
+  stroke-dasharray: 5 3;
+  animation: marching-ants 2s linear infinite;
+}
+
+body.meta-page dl.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+}
+
+body.meta-page dl.info dt {
+  margin: 0;
+  font-weight: 600;
+  color: oklch(45% 5% 250);
+}
+
+body.meta-page dl.info dd {
+  margin: 0;
+}
+
+body.meta-page dl.info.tooltip {
+  position: fixed;
+  z-index: 100;
+  max-width: min(90vw, 22rem);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  transition-duration: 500ms;
+  transition-property: opacity, visibility;
+}
+
+body.meta-page dl.info[hidden]:not(:hover, :focus-within) {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.meta-page dl.info.tooltip {
+    background-color: rgba(30, 30, 34, 0.92);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  }
+}
+
+body.meta-page #selection-count {
+  margin-block: 0.5rem 0.25rem;
+  font-weight: 600;
+}
+
+body.meta-page dl.language-stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.25rem;
+  row-gap: 0.35rem;
+  margin: 0 0 2rem;
+  padding: 1rem;
+  border: 1px solid oklch(85% 2% 220);
+  border-radius: 8px;
+  max-width: 42rem;
+}
+
+body.meta-page dl.language-stats dt {
+  margin: 0;
+  font-weight: 600;
+}
+
+body.meta-page dl.language-stats dd {
+  margin: 0;
+}

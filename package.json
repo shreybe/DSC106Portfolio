@@ -1,0 +1,8 @@
+{
+  "name": "dsc106portfolio",
+  "private": true,
+  "description": "DSC 106 portfolio — run `npx elocuent -d . -o meta/loc.csv --spaces 2` to refresh meta/loc.csv",
+  "devDependencies": {
+    "elocuent": "^0.0.4"
+  }
+}

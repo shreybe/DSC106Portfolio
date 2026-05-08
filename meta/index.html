@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta — Codebase analysis — Shreya Bharathwajan</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="meta-page">
+  <h1>Codebase meta-analysis</h1>
+  <p>
+    Summary statistics and a scatter plot of commits over time, generated from line-level blame data
+    (<code>meta/loc.csv</code>). Re-run <code>npx elocuent -d . -o meta/loc.csv --spaces 2</code> after new commits
+    to refresh the dataset.
+  </p>
+
+  <div id="stats"></div>
+
+  <h2>Commits by time of day</h2>
+  <div id="chart"></div>
+
+  <p id="selection-count">No commits selected</p>
+  <dl id="language-breakdown" class="stats language-stats"></dl>
+
+  <dl id="commit-tooltip" class="info tooltip" hidden>
+    <dt>Commit</dt>
+    <dd><a href="#" id="commit-link" target="_blank" rel="noopener noreferrer"></a></dd>
+    <dt>Date</dt>
+    <dd id="commit-date"></dd>
+    <dt>Time</dt>
+    <dd id="commit-time"></dd>
+    <dt>Author</dt>
+    <dd id="commit-author"></dd>
+    <dt>Lines edited</dt>
+    <dd id="commit-lines"></dd>
+  </dl>
+
+  <script type="module" src="../global.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
