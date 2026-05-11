@@ -11,7 +11,7 @@
 - **`js/fire-data.js`** — Optional embedded CSV mirror for static hosting (generated from `data/modis_fires_us.csv`).
 - **`data/modis_fires_us.csv`** — Bundled CONUS hotspot subset for the prototype.
 - **`scripts/`** — `fetch_firms_modis.py` (refresh from FIRMS API with `FIRMS_MAP_KEY`) and `generate_demo_modis_csv.py` (demo generator).
-- **`graphs/`** — Static exploratory figures referenced in the write-up.
+- **`react-app/`** — Optional **Vite + React** shell: map uses the **full top** of the viewport; panels sit in a deck below. Same D3 logic as `js/main.js` (see `react-app/src/initWildfire.ts`). Build with `npm run build` inside `react-app/`.
 
 ## Stack (assignment constraints)
 
