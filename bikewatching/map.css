@@ -11,7 +11,7 @@ body.bikewatching-page {
 .bikewatching-page #map {
   width: 100%;
   height: 100%;
-  min-height: min(70vh, 720px);
+  min-height: min(62vh, 680px);
   position: relative;
   border-radius: 8px;
   overflow: hidden;
@@ -27,58 +27,87 @@ body.bikewatching-page {
   pointer-events: none;
 }
 
+/* Match reference: orange (arrivals) → purple (balanced) → blue (departures) */
 :root {
-  --color-departures: steelblue;
-  --color-arrivals: darkorange;
+  --flow-arrivals: #e8891a;
+  --flow-balanced: #8b64d8;
+  --flow-departures: #2d7dd2;
 }
 
-/* Lab 7 Step 6: flow color from --departure-ratio (0 = arrivals, 1 = departures) */
 #map circle {
-  --color: color-mix(
-    in oklch,
-    var(--color-departures) calc(100% * var(--departure-ratio, 0.5)),
-    var(--color-arrivals)
-  );
-  fill: var(--color);
   fill-opacity: 0.6;
   stroke: white;
   stroke-width: 1px;
   pointer-events: auto;
 }
 
+/* Design 2: separate swatches (::before) + labels (Lab 7 Step 6.2) */
 .bikewatching-page .legend {
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
-  gap: 1px;
-  margin-block: 0 1rem;
-  padding: 0;
-  border-radius: 6px;
-  overflow: hidden;
-  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 1.75rem;
+  margin-block: 1rem 1.25rem;
 }
 
-/* Design 1: equal blocks */
-.bikewatching-page .legend > div {
-  flex: 1;
-  min-width: 7rem;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.85rem;
+.bikewatching-page .legend-heading {
+  font-size: 0.8rem;
   font-weight: 600;
-  text-align: center;
-  --color: color-mix(
-    in oklch,
-    var(--color-departures) calc(100% * var(--departure-ratio, 0.5)),
-    var(--color-arrivals)
-  );
-  background: var(--color);
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: oklch(58% 2% 250);
+}
+
+.bikewatching-page .legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1.5rem;
+}
+
+.bikewatching-page .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: CanvasText;
+}
+
+.bikewatching-page .legend-item::before {
+  content: '';
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.bikewatching-page .legend-item.legend-departures::before {
+  background: var(--flow-departures);
+}
+
+.bikewatching-page .legend-item.legend-balanced::before {
+  background: var(--flow-balanced);
+}
+
+.bikewatching-page .legend-item.legend-arrivals::before {
+  background: var(--flow-arrivals);
 }
 
 @media (max-width: 640px) {
-  .bikewatching-page label.time-control {
+  .bikewatching-page .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bikewatching-page .time-filter {
     margin-left: 0;
-    width: 100%;
+    align-items: flex-start;
+  }
+
+  .bikewatching-page .time-readout {
+    align-self: flex-end;
   }
 }

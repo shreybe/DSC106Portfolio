@@ -23,7 +23,11 @@ const BIKE_LANE_PAINT = {
  */
 const MAPBOX_ACCESS_TOKEN = '';
 
-const stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
+/** Departure share: low → more arrivals (orange), mid → balanced (purple), high → more departures (blue) */
+const FLOW_FILL = d3
+  .scaleQuantize()
+  .domain([0, 1])
+  .range(['#e8891a', '#8b64d8', '#2d7dd2']);
 
 const departuresByMinute = Array.from({ length: 1440 }, () => []);
 const arrivalsByMinute = Array.from({ length: 1440 }, () => []);
@@ -116,10 +120,9 @@ function updateScatterPlot(timeFilter) {
     .data(withTraffic, (d) => d.short_name)
     .join('circle')
     .attr('r', (d) => radiusScale(d.totalTraffic))
-    .style('--departure-ratio', (d) => {
-      if (!d.totalTraffic) return 0.5;
-      return stationFlow(d.departures / d.totalTraffic);
-    })
+    .style('fill', (d) =>
+      d.totalTraffic ? FLOW_FILL(d.departures / d.totalTraffic) : '#8b64d8',
+    )
     .each(function (d) {
       d3.select(this).selectAll('title').remove();
       d3.select(this)

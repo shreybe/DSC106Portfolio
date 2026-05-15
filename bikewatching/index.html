@@ -7,7 +7,6 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="global.css" />
     <link rel="stylesheet" href="map.css" />
-    <!-- Mapbox GL JS CSS -->
     <link
       href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
       rel="stylesheet"
@@ -15,29 +14,25 @@
   </head>
   <body class="bikewatching-page">
     <header class="page-header">
-      <h1>🚴🏼‍♀️ Bikewatching</h1>
-      <label class="time-control" for="time-slider">
-        <span>Filter by time:</span>
-        <input
-          id="time-slider"
-          type="range"
-          min="-1"
-          max="1440"
-          value="-1"
-          step="1"
-        />
-        <span class="time-display">
+      <h1>🚲 Bikewatching</h1>
+      <div class="time-filter">
+        <div class="time-filter-row">
+          <label for="time-slider">Filter by time:</label>
+          <input
+            id="time-slider"
+            type="range"
+            min="-1"
+            max="1440"
+            value="-1"
+            step="1"
+          />
+        </div>
+        <div class="time-readout">
           <time id="selected-time"></time>
           <em id="any-time">(any time)</em>
-        </span>
-      </label>
+        </div>
+      </div>
     </header>
-
-    <p>
-      Interactive Mapbox map of Boston-area bike lanes and BlueBikes stations. Circle size shows trip volume;
-      color shows whether traffic is mostly departures (blue) or arrivals (orange). Use the slider to filter trips
-      by time of day (±60 minutes).
-    </p>
 
     <div class="map-wrap">
       <div id="map">
@@ -46,9 +41,12 @@
     </div>
 
     <div class="legend" aria-label="Traffic flow legend">
-      <div style="--departure-ratio: 1">More departures</div>
-      <div style="--departure-ratio: 0.5">Balanced</div>
-      <div style="--departure-ratio: 0">More arrivals</div>
+      <span class="legend-heading">Legend:</span>
+      <div class="legend-items">
+        <div class="legend-item legend-departures">More departures</div>
+        <div class="legend-item legend-balanced">Balanced</div>
+        <div class="legend-item legend-arrivals">More arrivals</div>
+      </div>
     </div>
 
     <script type="module" src="../global.js"></script>
