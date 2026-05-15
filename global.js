@@ -129,7 +129,11 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     const image = project.image ?? 'https://vis-society.github.io/labs/2/images/empty.svg';
     const description = project.description ?? 'No description provided yet.';
     const year = project.year ? `<p class="project-year">${project.year}</p>` : '';
-    const rawLink = typeof project.link === 'string' ? project.link.trim() : '';
+    const rawLinkFromUrl =
+      typeof project.url === 'string' && project.url.trim() ? project.url.trim() : '';
+    const rawLinkFromLink =
+      typeof project.link === 'string' && project.link.trim() ? project.link.trim() : '';
+    const rawLink = rawLinkFromUrl || rawLinkFromLink;
     const linkHref =
       rawLink && !rawLink.startsWith('http') ? `${BASE_PATH}${rawLink.replace(/^\//, '')}` : rawLink;
     const linkText =
