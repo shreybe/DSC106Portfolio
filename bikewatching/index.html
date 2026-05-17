@@ -14,7 +14,10 @@
   </head>
   <body class="bikewatching-page">
     <header class="page-header">
-      <h1>🚲 Bikewatching</h1>
+      <div class="title-block">
+        <p class="back-link"><a href="../projects/">← Projects</a></p>
+        <h1>🚲 Bikewatching</h1>
+      </div>
       <div class="time-filter">
         <div class="time-filter-row">
           <label for="time-slider">Filter by time:</label>
@@ -33,6 +36,33 @@
         </div>
       </div>
     </header>
+
+    <section id="token-setup" class="token-setup" hidden>
+      <h2>Mapbox setup (one time)</h2>
+      <p>
+        The map needs a free <strong>public</strong> token from
+        <a href="https://account.mapbox.com/access-tokens/" target="_blank" rel="noopener noreferrer"
+          >Mapbox</a
+        >
+        (sign up with your UCSD email). Paste it below — it is saved only in this browser.
+      </p>
+      <form id="token-form">
+        <label class="token-label" for="token-input">
+          Access token (<code>pk.</code>…)
+          <input
+            id="token-input"
+            name="token"
+            type="password"
+            placeholder="pk.eyJ1Ijoi..."
+            autocomplete="off"
+            required
+          />
+        </label>
+        <button type="submit">Save &amp; load map</button>
+      </form>
+    </section>
+
+    <p id="map-status" class="map-status" aria-live="polite"></p>
 
     <div class="map-wrap">
       <div id="map">

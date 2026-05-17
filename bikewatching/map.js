@@ -17,17 +17,12 @@ const BIKE_LANE_PAINT = {
   'line-opacity': 0.55,
 };
 
-/**
- * Paste your Mapbox *public* access token (starts with pk.) from
- * https://account.mapbox.com/access-tokens/
- */
-const MAPBOX_ACCESS_TOKEN = '';
-
-/** Departure share: low → more arrivals (orange), mid → balanced (purple), high → more departures (blue) */
 const FLOW_FILL = d3
   .scaleQuantize()
   .domain([0, 1])
   .range(['#e8891a', '#8b64d8', '#2d7dd2']);
+
+const DEFAULT_STATION_FILL = 'steelblue';
 
 const departuresByMinute = Array.from({ length: 1440 }, () => []);
 const arrivalsByMinute = Array.from({ length: 1440 }, () => []);
@@ -36,6 +31,31 @@ let map;
 let rawStations = [];
 let radiusScale = d3.scaleSqrt().domain([0, 1]).range([0, 25]);
 const svg = d3.select('#map').select('svg');
+const statusEl = document.getElementById('map-status');
+
+function setStatus(message) {
+  if (statusEl) statusEl.textContent = message;
+}
+
+async function resolveMapboxToken() {
+  try {
+    const cfg = await import('./mapbox-config.js');
+    if (cfg.MAPBOX_ACCESS_TOKEN?.trim()) return cfg.MAPBOX_ACCESS_TOKEN.trim();
+  } catch {
+    /* optional local file */
+  }
+
+  const fromStorage = localStorage.getItem('mapbox_access_token');
+  if (fromStorage?.trim()) return fromStorage.trim();
+
+  const fromUrl = new URLSearchParams(location.search).get('mapbox_token');
+  if (fromUrl?.trim()) {
+    localStorage.setItem('mapbox_access_token', fromUrl.trim());
+    return fromUrl.trim();
+  }
+
+  return '';
+}
 
 function formatTime(minutes) {
   const date = new Date(0, 0, 0, 0, minutes);
@@ -47,33 +67,26 @@ function minutesSinceMidnight(date) {
 }
 
 function filterByMinute(tripsByMinute, minute) {
-  if (minute === -1) {
-    return tripsByMinute.flat();
-  }
+  if (minute === -1) return tripsByMinute.flat();
 
-  let minMinute = (minute - 60 + 1440) % 1440;
-  let maxMinute = (minute + 60) % 1440;
+  const minMinute = (minute - 60 + 1440) % 1440;
+  const maxMinute = (minute + 60) % 1440;
 
   if (minMinute > maxMinute) {
-    const beforeMidnight = tripsByMinute.slice(minMinute);
-    const afterMidnight = tripsByMinute.slice(0, maxMinute);
-    return beforeMidnight.concat(afterMidnight).flat();
+    return tripsByMinute.slice(minMinute).concat(tripsByMinute.slice(0, maxMinute)).flat();
   }
   return tripsByMinute.slice(minMinute, maxMinute).flat();
 }
 
 function computeStationTraffic(stationList, timeFilter = -1) {
-  const depTrips = filterByMinute(departuresByMinute, timeFilter);
-  const arrTrips = filterByMinute(arrivalsByMinute, timeFilter);
-
   const departures = d3.rollup(
-    depTrips,
+    filterByMinute(departuresByMinute, timeFilter),
     (v) => v.length,
     (d) => d.start_station_id,
   );
 
   const arrivals = d3.rollup(
-    arrTrips,
+    filterByMinute(arrivalsByMinute, timeFilter),
     (v) => v.length,
     (d) => d.end_station_id,
   );
@@ -91,10 +104,20 @@ function computeStationTraffic(stationList, timeFilter = -1) {
   });
 }
 
+function stationFill(d, timeFilter) {
+  if (timeFilter === -1 || !d.totalTraffic) return DEFAULT_STATION_FILL;
+  return FLOW_FILL(d.departures / d.totalTraffic);
+}
+
 function getCoords(station) {
   const point = new mapboxgl.LngLat(+station.lon, +station.lat);
   const { x, y } = map.project(point);
   return { cx: x, cy: y };
+}
+
+function raiseSvgOverlay() {
+  const svgEl = document.querySelector('#map svg');
+  if (svgEl?.parentNode) svgEl.parentNode.appendChild(svgEl);
 }
 
 function updatePositions() {
@@ -104,25 +127,23 @@ function updatePositions() {
     .attr('cy', (d) => getCoords(d).cy);
 }
 
-function updateScatterPlot(timeFilter) {
-  const withTraffic = computeStationTraffic(rawStations, timeFilter);
-  const maxT = d3.max(withTraffic, (d) => d.totalTraffic) || 1;
-  radiusScale.domain([0, maxT]);
+let currentTimeFilter = -1;
 
-  if (timeFilter === -1) {
-    radiusScale.range([0, 25]);
-  } else {
-    radiusScale.range([3, 50]);
-  }
+function updateScatterPlot(timeFilter) {
+  currentTimeFilter = timeFilter;
+  const withTraffic = computeStationTraffic(rawStations, timeFilter);
+  const sorted = d3.sort(withTraffic, (d) => d.totalTraffic);
+  const maxT = d3.max(withTraffic, (d) => d.totalTraffic) || 1;
+
+  radiusScale.domain([0, maxT]);
+  radiusScale.range(timeFilter === -1 ? [0, 25] : [3, 50]);
 
   svg
     .selectAll('circle')
-    .data(withTraffic, (d) => d.short_name)
+    .data(sorted, (d) => d.short_name)
     .join('circle')
     .attr('r', (d) => radiusScale(d.totalTraffic))
-    .style('fill', (d) =>
-      d.totalTraffic ? FLOW_FILL(d.departures / d.totalTraffic) : '#8b64d8',
-    )
+    .style('fill', (d) => stationFill(d, timeFilter))
     .each(function (d) {
       d3.select(this).selectAll('title').remove();
       d3.select(this)
@@ -133,10 +154,13 @@ function updateScatterPlot(timeFilter) {
     });
 
   updatePositions();
+  raiseSvgOverlay();
 }
 
-function initMap() {
-  mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+function initMap(accessToken) {
+  if (map) return;
+
+  mapboxgl.accessToken = accessToken;
 
   map = new mapboxgl.Map({
     container: 'map',
@@ -148,6 +172,8 @@ function initMap() {
   });
 
   map.on('load', async () => {
+    setStatus('Loading bike lanes…');
+
     map.addSource('boston_route', {
       type: 'geojson',
       data: BOSTON_BIKE_GEOJSON,
@@ -170,14 +196,17 @@ function initMap() {
       paint: BIKE_LANE_PAINT,
     });
 
+    setStatus('Loading stations…');
     let jsonData;
     try {
       jsonData = await d3.json(STATIONS_JSON);
     } catch (e) {
-      console.error('Error loading stations JSON:', e);
+      console.error(e);
+      setStatus('Could not load station data.');
       return;
     }
 
+    setStatus('Loading March 2024 trip data (this can take a minute)…');
     const trips = await d3.csv(TRAFFIC_CSV, (trip) => {
       trip.started_at = new Date(trip.started_at);
       trip.ended_at = new Date(trip.ended_at);
@@ -185,13 +214,12 @@ function initMap() {
     });
 
     for (const trip of trips) {
-      const startedMinutes = minutesSinceMidnight(trip.started_at);
-      const endedMinutes = minutesSinceMidnight(trip.ended_at);
-      departuresByMinute[startedMinutes].push(trip);
-      arrivalsByMinute[endedMinutes].push(trip);
+      departuresByMinute[minutesSinceMidnight(trip.started_at)].push(trip);
+      arrivalsByMinute[minutesSinceMidnight(trip.ended_at)].push(trip);
     }
 
     rawStations = jsonData.data.stations;
+    setStatus('');
 
     const timeSlider = document.getElementById('time-slider');
     const selectedTime = document.getElementById('selected-time');
@@ -202,17 +230,16 @@ function initMap() {
 
       if (tf === -1) {
         selectedTime.textContent = '';
-        anyTimeLabel.style.display = 'block';
+        anyTimeLabel.hidden = false;
       } else {
         selectedTime.textContent = formatTime(tf);
-        anyTimeLabel.style.display = 'none';
+        anyTimeLabel.hidden = true;
       }
 
       updateScatterPlot(tf);
     }
 
-    updateScatterPlot(-1);
-
+    updateTimeDisplay();
     timeSlider.addEventListener('input', updateTimeDisplay);
 
     map.on('move', updatePositions);
@@ -220,21 +247,43 @@ function initMap() {
     map.on('resize', updatePositions);
     map.on('moveend', updatePositions);
 
-    const svgEl = document.querySelector('#map svg');
-    if (svgEl?.parentNode) {
-      svgEl.parentNode.appendChild(svgEl);
-    }
+    raiseSvgOverlay();
   });
 }
 
-if (!MAPBOX_ACCESS_TOKEN?.trim()) {
-  const el = document.querySelector('#map');
-  if (el) {
-    el.innerHTML = `<p class="map-error" style="padding:2rem;margin:0">
-      Add your Mapbox public token to <code>bikewatching/map.js</code>
-      (<code>MAPBOX_ACCESS_TOKEN</code>), then reload this page.
-    </p>`;
-  }
+const tokenSetup = document.getElementById('token-setup');
+const tokenForm = document.getElementById('token-form');
+const tokenInput = document.getElementById('token-input');
+
+function showTokenSetup() {
+  if (tokenSetup) tokenSetup.hidden = false;
+}
+
+function hideTokenSetup() {
+  if (tokenSetup) tokenSetup.hidden = true;
+}
+
+function bindTokenForm() {
+  tokenForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = tokenInput?.value.trim() ?? '';
+    if (!value.startsWith('pk.')) {
+      setStatus('Token must start with pk. — use your Mapbox public access token.');
+      return;
+    }
+    localStorage.setItem('mapbox_access_token', value);
+    hideTokenSetup();
+    setStatus('Loading map…');
+    initMap(value);
+  });
+}
+
+const token = await resolveMapboxToken();
+
+if (!token) {
+  showTokenSetup();
+  bindTokenForm();
 } else {
-  initMap();
+  hideTokenSetup();
+  initMap(token);
 }

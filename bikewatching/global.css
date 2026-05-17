@@ -17,6 +17,63 @@ body.bikewatching-page .map-error {
   color: CanvasText;
 }
 
+body.bikewatching-page .token-setup {
+  margin: 0 0 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid oklch(85% 5% 80);
+  border-radius: 8px;
+  background: oklch(97% 3% 95);
+}
+
+body.bikewatching-page .token-setup h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+body.bikewatching-page .token-setup p {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+body.bikewatching-page #token-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+body.bikewatching-page .token-label {
+  flex: 1 1 16rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+body.bikewatching-page #token-input {
+  font: inherit;
+  padding: 0.45rem 0.6rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+body.bikewatching-page #token-form button {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+body.bikewatching-page .map-status {
+  margin: 0 0 0.5rem;
+  min-height: 1.25em;
+  font-size: 0.9rem;
+  color: oklch(45% 4% 250);
+}
+
+body.bikewatching-page #any-time[hidden] {
+  display: none;
+}
+
 .bikewatching-page header.page-header {
   display: flex;
   flex-wrap: wrap;
@@ -25,6 +82,26 @@ body.bikewatching-page .map-error {
   gap: 1rem;
   margin-bottom: 0.65rem;
   width: 100%;
+}
+
+.bikewatching-page .title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.bikewatching-page .back-link {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.bikewatching-page .back-link a {
+  color: oklch(45% 8% 250);
+  text-decoration: none;
+}
+
+.bikewatching-page .back-link a:hover {
+  text-decoration: underline;
 }
 
 .bikewatching-page header.page-header h1 {
