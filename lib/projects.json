@@ -4,7 +4,7 @@
     "year": 2026,
     "image": "https://vis-society.github.io/labs/2/images/empty.svg",
     "description": "Mapbox + D3: Boston and Cambridge bike lanes, BlueBikes stations with trip volume (circle size) and flow direction (color), time-of-day filtering with per-minute buckets, and SVG markers that track pan/zoom.",
-    "url": "bikewatching/index.html",
+    "url": "https://shreybe.github.io/bikewatching/",
     "linkText": "Open map"
   },
   {
