@@ -69,48 +69,39 @@ function usableArea() {
   };
 }
 
-function renderCommitInfo(locData, commitList) {
-  const container = d3.select('#stats');
-  container.selectAll('*').remove();
-  const dl = container.append('dl').attr('class', 'stats');
-
-  dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
-  dl.append('dd').text(locData.length);
-
-  dl.append('dt').text('Commits in view');
-  dl.append('dd').text(commitList.length);
-
+function renderCommitInfo(_locData, commitList) {
   const linesInView = commitList.flatMap((d) => d.lines);
   const numFiles = d3.group(linesInView, (d) => d.file).size;
-  dl.append('dt').text('Distinct files');
-  dl.append('dd').text(numFiles);
-
-  const numAuthors = d3.group(linesInView, (d) => d.author).size;
-  dl.append('dt').text('Distinct authors');
-  dl.append('dd').text(numAuthors);
-
-  const maxDepth = d3.max(linesInView, (d) => d.depth);
-  dl.append('dt').text('Maximum indentation depth');
-  dl.append('dd').text(maxDepth ?? '—');
-
-  const avgLineLen = d3.mean(linesInView, (d) => d.length);
-  dl.append('dt').text('Average line length (chars)');
-  dl.append('dd').text(avgLineLen != null ? avgLineLen.toFixed(1) : '—');
-
+  const maxDepth = d3.max(linesInView, (d) => d.depth) ?? 0;
+  const longestLine = d3.max(linesInView, (d) => d.length) ?? 0;
   const fileLengths = d3.rollups(
     linesInView,
     (v) => d3.max(v, (r) => r.line),
     (d) => d.file,
   );
-  const avgFileLen = d3.mean(fileLengths, (d) => d[1]);
-  dl.append('dt').text('Average file length (lines)');
-  dl.append('dd').text(avgFileLen != null ? avgFileLen.toFixed(1) : '—');
+  const maxLines = d3.max(fileLengths, (d) => d[1]) ?? 0;
 
-  const longestFile = d3.greatest(fileLengths, (d) => d[1]);
-  if (longestFile) {
-    dl.append('dt').text('Longest file (lines)');
-    dl.append('dd').text(`${longestFile[0]} (${longestFile[1]} lines)`);
-  }
+  const metrics = [
+    { label: 'Commits', value: commitList.length },
+    { label: 'Files', value: numFiles },
+    { label: 'Total LOC', value: linesInView.length },
+    { label: 'Max depth', value: maxDepth },
+    { label: 'Longest line', value: longestLine },
+    { label: 'Max lines', value: maxLines },
+  ];
+
+  const container = d3.select('#stats');
+  container.selectAll('*').remove();
+  const row = container
+    .append('div')
+    .attr('class', 'stats-row')
+    .selectAll('div')
+    .data(metrics)
+    .join('div')
+    .attr('class', 'stat');
+
+  row.append('span').attr('class', 'stat-label').text((d) => d.label);
+  row.append('span').attr('class', 'stat-value').text((d) => d.value);
 }
 
 function renderTooltipContent(commit) {
@@ -163,8 +154,11 @@ function renderLanguageBreakdown(selection, commitList, isCommitSelected) {
 
   if (selectedCommits.length === 0) {
     container.innerHTML = '';
+    container.hidden = true;
     return;
   }
+
+  container.hidden = false;
 
   const lines = selectedCommits.flatMap((d) => d.lines);
   const breakdown = d3.rollup(lines, (v) => v.length, (d) => d.type);
@@ -313,9 +307,13 @@ function renderScatterPlot(locData, commitList) {
   function renderSelectionCount(selection, list, fn) {
     const selectedCommits = selection ? list.filter((d) => fn(selection, d)) : [];
     const countElement = document.querySelector('#selection-count');
-    if (countElement) {
-      countElement.textContent = `${selectedCommits.length || 'No'} commits selected`;
+    if (!countElement) return;
+    if (!selection) {
+      countElement.hidden = true;
+      return;
     }
+    countElement.hidden = false;
+    countElement.textContent = `${selectedCommits.length} commits selected`;
   }
 
   dots
@@ -447,32 +445,33 @@ function renderScatterStory() {
     .data(commits)
     .join('div')
     .attr('class', 'step')
-    .html((d, i) => {
-      const fileCount = d3.rollups(
+    .html(
+      (d, i) => `
+		On ${d.datetime.toLocaleString('en', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+    })},
+		I made <a href="${d.url}" target="_blank" rel="noopener noreferrer">${
+      i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
+    }</a>.
+		I edited ${d.totalLines} lines across ${
+      d3.rollups(
         d.lines,
         (v) => v.length,
         (line) => line.file,
-      ).length;
-      return `
-        <p>
-          On ${d.datetime.toLocaleString('en', { dateStyle: 'full', timeStyle: 'short' })},
-          I made <a href="${d.url}" target="_blank" rel="noopener noreferrer">${
-            i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'
-          }</a>.
-          I edited ${d.totalLines} lines across ${fileCount} files.
-          Then I looked over all I had made, and I saw that it was very good.
-        </p>
-      `;
-    });
+      ).length
+    } files.
+		Then I looked over all I had made, and I saw that it was very good.
+	`,
+    );
 }
 
 function initScrollama() {
   const scroller = scrollama();
   scroller
     .setup({
-      container: '#scrolly-1',
       step: '#scrolly-1 .step',
-      offset: 0.5,
+      offset: 0.55,
     })
     .onStepEnter(onStepEnter);
 }

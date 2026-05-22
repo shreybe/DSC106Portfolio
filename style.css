@@ -359,35 +359,56 @@ body.meta-page h2 {
 }
 
 body.meta-page #stats {
-  margin-block: 1rem 1.5rem;
+  margin-block: 1.25rem 1.75rem;
 }
 
-body.meta-page #stats dl.stats {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 1.25rem;
-  row-gap: 0.35rem;
+body.meta-page #stats .stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
   margin: 0;
-  padding: 1rem;
-  border: 1px solid oklch(85% 2% 220);
-  border-radius: 8px;
-  max-width: 42rem;
 }
 
-body.meta-page #stats dl.stats dt {
-  margin: 0;
+body.meta-page #stats .stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 5rem;
+}
+
+body.meta-page #stats .stat-label {
+  font-size: 0.7rem;
   font-weight: 600;
-  color: oklch(42% 5% 250);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: oklch(50% 4% 250);
 }
 
-body.meta-page #stats dl.stats dd {
-  margin: 0;
+body.meta-page #stats .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: CanvasText;
+}
+
+body.meta-page #chart-panel {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  background: Canvas;
+}
+
+body.meta-page h2.chart-heading {
+  margin-block: 0.5rem 0.35rem;
 }
 
 body.meta-page #chart {
   width: 100%;
-  max-width: min(100%, 56rem);
-  margin-block: 0.35rem 1rem;
+  max-width: min(100%, 64rem);
+  margin-block: 0;
 }
 
 body.meta-page .meta-scatter-svg {
@@ -514,10 +535,19 @@ body.meta-page dl.info[hidden]:not(:hover, :focus-within) {
   }
 }
 
-body.meta-page #selection-count {
-  margin-block: 1rem 0.65rem;
+body.meta-page #selection-count[hidden],
+body.meta-page #language-breakdown[hidden] {
+  display: none;
+}
+
+body.meta-page #chart-panel #selection-count:not([hidden]) {
+  margin-block: 0.75rem 0;
   font-weight: 700;
   font-size: 1rem;
+}
+
+body.meta-page #chart-panel #language-breakdown:not([hidden]) {
+  margin-block: 0.75rem 0 1rem;
 }
 
 /* Lab 8: timeline slider, scrollytelling, unit viz */
@@ -525,40 +555,35 @@ body.meta-page .commit-progress-control {
   display: flex;
   flex: 1;
   align-items: baseline;
-  margin-block: 1rem 1.25rem;
-  max-width: 42rem;
+  margin-block: 1rem 1.5rem;
+  width: 100%;
 }
 
 body.meta-page .commit-progress-control label {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
+  flex: 1;
+  align-items: baseline;
+  gap: 0.75rem;
   width: 100%;
   font-weight: 600;
 }
 
 body.meta-page #commit-progress {
   flex: 1;
-  min-width: 10rem;
-  max-width: 20rem;
+  min-width: 8rem;
+  max-width: none;
 }
 
 body.meta-page #commit-time {
   margin-left: auto;
   font-variant-numeric: tabular-nums;
+  font-weight: 400;
 }
 
 body.meta-page #scrolly-1 {
   position: relative;
-  display: flex;
-  gap: 1.5rem;
-  margin-block: 1.5rem 2rem;
-}
-
-body.meta-page #scrolly-1 > * {
-  flex: 1;
-  min-width: 0;
+  margin-block: 2rem 3rem;
+  max-width: 36rem;
 }
 
 body.meta-page #scatter-story {
@@ -566,44 +591,23 @@ body.meta-page #scatter-story {
 }
 
 body.meta-page #scatter-story .step {
-  min-height: 70vh;
+  min-height: 75vh;
   padding-bottom: 4rem;
   font-size: 1.05rem;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
-body.meta-page #scatter-story .step p {
-  margin: 0;
-}
-
-body.meta-page #scatter-plot {
-  position: sticky;
-  top: 0;
-  align-self: flex-start;
-  height: 50vh;
-  min-height: 22rem;
-}
-
-body.meta-page #scatter-plot #chart {
-  height: 100%;
-  max-width: 100%;
-}
-
-body.meta-page #scatter-plot .meta-scatter-svg {
-  width: 100%;
-  height: 100%;
-}
-
-body.meta-page .files-heading {
-  margin-block: 2rem 0.75rem;
+body.meta-page #scatter-story .step a {
+  font-weight: 600;
 }
 
 body.meta-page #files {
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 0.5rem 1rem;
-  margin: 0 0 2rem;
+  margin: 0 0 1.25rem;
   padding: 0;
+  width: 100%;
 }
 
 body.meta-page #files > div {

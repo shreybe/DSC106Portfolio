@@ -13,7 +13,7 @@
     (<code>meta/loc.csv</code>). Re-run <code>npx elocuent -d . -o meta/loc.csv --spaces 2</code> after new commits.
   </p>
 
-  <div id="commit-progress-control" class="commit-progress-control">
+  <div class="commit-progress-control">
     <label for="commit-progress">
       Show commits until:
       <input id="commit-progress" type="range" min="0" max="100" value="100" step="1" />
@@ -21,20 +21,20 @@
     </label>
   </div>
 
+  <dl id="files"></dl>
+
   <div id="stats"></div>
+
+  <div id="chart-panel">
+    <h2 class="chart-heading">Commits by time of day</h2>
+    <div id="chart"></div>
+    <p id="selection-count" hidden>No commits selected</p>
+    <div id="language-breakdown" class="language-breakdown" hidden aria-live="polite"></div>
+  </div>
 
   <div id="scrolly-1">
     <div id="scatter-story" aria-label="Commit narrative"></div>
-    <div id="scatter-plot">
-      <h2>Commits by time of day</h2>
-      <div id="chart"></div>
-      <p id="selection-count">No commits selected</p>
-      <div id="language-breakdown" class="language-breakdown" aria-live="polite"></div>
-    </div>
   </div>
-
-  <h2 class="files-heading">File sizes in view</h2>
-  <dl id="files"></dl>
 
   <dl id="commit-tooltip" class="info tooltip" hidden>
     <dt>Commit</dt>
