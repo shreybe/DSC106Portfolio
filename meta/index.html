@@ -9,18 +9,32 @@
 <body class="meta-page">
   <h1>Codebase meta-analysis</h1>
   <p>
-    Summary statistics and a scatter plot of commits over time, generated from line-level blame data
-    (<code>meta/loc.csv</code>). Re-run <code>npx elocuent -d . -o meta/loc.csv --spaces 2</code> after new commits
-    to refresh the dataset.
+    Interactive narrative of how this portfolio codebase evolved, from line-level blame data
+    (<code>meta/loc.csv</code>). Re-run <code>npx elocuent -d . -o meta/loc.csv --spaces 2</code> after new commits.
   </p>
+
+  <div id="commit-progress-control" class="commit-progress-control">
+    <label for="commit-progress">
+      Show commits until:
+      <input id="commit-progress" type="range" min="0" max="100" value="100" step="1" />
+      <time id="commit-time"></time>
+    </label>
+  </div>
 
   <div id="stats"></div>
 
-  <h2>Commits by time of day</h2>
-  <div id="chart"></div>
+  <div id="scrolly-1">
+    <div id="scatter-story" aria-label="Commit narrative"></div>
+    <div id="scatter-plot">
+      <h2>Commits by time of day</h2>
+      <div id="chart"></div>
+      <p id="selection-count">No commits selected</p>
+      <div id="language-breakdown" class="language-breakdown" aria-live="polite"></div>
+    </div>
+  </div>
 
-  <p id="selection-count">No commits selected</p>
-  <dl id="language-breakdown" class="stats language-stats"></dl>
+  <h2 class="files-heading">File sizes in view</h2>
+  <dl id="files"></dl>
 
   <dl id="commit-tooltip" class="info tooltip" hidden>
     <dt>Commit</dt>
@@ -28,7 +42,7 @@
     <dt>Date</dt>
     <dd id="commit-date"></dd>
     <dt>Time</dt>
-    <dd id="commit-time"></dd>
+    <dd id="commit-time-tooltip"></dd>
     <dt>Author</dt>
     <dd id="commit-author"></dd>
     <dt>Lines edited</dt>

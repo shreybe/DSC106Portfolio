@@ -347,6 +347,17 @@ body.cv-page #links a {
 }
 
 /* Lab 6: meta page — stats, scatter plot, tooltip, brush */
+body.meta-page {
+  max-width: min(100%, 72rem);
+}
+
+body.meta-page h2 {
+  margin-block: 1.75rem 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: CanvasText;
+}
+
 body.meta-page #stats {
   margin-block: 1rem 1.5rem;
 }
@@ -375,23 +386,45 @@ body.meta-page #stats dl.stats dd {
 
 body.meta-page #chart {
   width: 100%;
-  max-width: min(100%, 72rem);
-  margin-block: 0.5rem 1rem;
+  max-width: min(100%, 56rem);
+  margin-block: 0.35rem 1rem;
+}
+
+body.meta-page .meta-scatter-svg {
+  display: block;
+  font-family: system-ui, sans-serif;
 }
 
 body.meta-page .meta-scatter-svg .gridlines line {
-  stroke: oklch(75% 4% 240);
-  stroke-opacity: 0.45;
+  stroke: #ccc;
+  stroke-opacity: 1;
 }
 
 body.meta-page .meta-scatter-svg .gridlines path.domain {
   display: none;
 }
 
+body.meta-page .meta-scatter-svg .domain {
+  stroke: #333;
+}
+
+body.meta-page .meta-scatter-svg .tick line {
+  stroke: #888;
+}
+
+body.meta-page .meta-scatter-svg text {
+  fill: #222;
+  font-size: 11px;
+}
+
 body.meta-page .meta-scatter-svg circle {
-  transition: 200ms;
+  transition: all 200ms, r calc(var(--r, 5) * 1ms);
   transform-origin: center;
   transform-box: fill-box;
+
+  @starting-style {
+    r: 0;
+  }
 }
 
 body.meta-page .meta-scatter-svg circle:hover {
@@ -399,7 +432,7 @@ body.meta-page .meta-scatter-svg circle:hover {
 }
 
 body.meta-page .meta-scatter-svg circle.selected {
-  fill: #ff6b6b;
+  fill: #ff8a8a;
 }
 
 @keyframes marching-ants {
@@ -409,11 +442,15 @@ body.meta-page .meta-scatter-svg circle.selected {
 }
 
 body.meta-page .selection {
-  fill-opacity: 0.1;
-  stroke: black;
-  stroke-opacity: 0.7;
+  fill: rgba(160, 160, 160, 0.22);
+  stroke: #222;
+  stroke-opacity: 0.85;
   stroke-dasharray: 5 3;
   animation: marching-ants 2s linear infinite;
+}
+
+body.meta-page .meta-scatter-svg .overlay {
+  cursor: crosshair;
 }
 
 body.meta-page dl.info {
@@ -457,30 +494,188 @@ body.meta-page dl.info[hidden]:not(:hover, :focus-within) {
     background-color: rgba(30, 30, 34, 0.92);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
   }
+
+  body.meta-page .meta-scatter-svg .gridlines line {
+    stroke: oklch(45% 3% 250);
+  }
+
+  body.meta-page .meta-scatter-svg text {
+    fill: oklch(92% 2% 250);
+  }
+
+  body.meta-page .meta-scatter-svg .domain,
+  body.meta-page .meta-scatter-svg .tick line {
+    stroke: oklch(65% 4% 250);
+  }
+
+  body.meta-page .selection {
+    fill: rgba(255, 255, 255, 0.08);
+    stroke: oklch(85% 5% 250);
+  }
 }
 
 body.meta-page #selection-count {
-  margin-block: 0.5rem 0.25rem;
-  font-weight: 600;
+  margin-block: 1rem 0.65rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
-body.meta-page dl.language-stats {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 1.25rem;
-  row-gap: 0.35rem;
-  margin: 0 0 2rem;
-  padding: 1rem;
-  border: 1px solid oklch(85% 2% 220);
-  border-radius: 8px;
+/* Lab 8: timeline slider, scrollytelling, unit viz */
+body.meta-page .commit-progress-control {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  margin-block: 1rem 1.25rem;
   max-width: 42rem;
 }
 
-body.meta-page dl.language-stats dt {
-  margin: 0;
+body.meta-page .commit-progress-control label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  width: 100%;
   font-weight: 600;
 }
 
-body.meta-page dl.language-stats dd {
+body.meta-page #commit-progress {
+  flex: 1;
+  min-width: 10rem;
+  max-width: 20rem;
+}
+
+body.meta-page #commit-time {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+body.meta-page #scrolly-1 {
+  position: relative;
+  display: flex;
+  gap: 1.5rem;
+  margin-block: 1.5rem 2rem;
+}
+
+body.meta-page #scrolly-1 > * {
+  flex: 1;
+  min-width: 0;
+}
+
+body.meta-page #scatter-story {
+  position: relative;
+}
+
+body.meta-page #scatter-story .step {
+  min-height: 70vh;
+  padding-bottom: 4rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+body.meta-page #scatter-story .step p {
   margin: 0;
+}
+
+body.meta-page #scatter-plot {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 50vh;
+  min-height: 22rem;
+}
+
+body.meta-page #scatter-plot #chart {
+  height: 100%;
+  max-width: 100%;
+}
+
+body.meta-page #scatter-plot .meta-scatter-svg {
+  width: 100%;
+  height: 100%;
+}
+
+body.meta-page .files-heading {
+  margin-block: 2rem 0.75rem;
+}
+
+body.meta-page #files {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 0.5rem 1rem;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+body.meta-page #files > div {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: start;
+}
+
+body.meta-page #files dt {
+  grid-column: 1;
+  margin: 0;
+}
+
+body.meta-page #files dt code {
+  font-size: 0.9em;
+}
+
+body.meta-page #files dt small {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+body.meta-page #files dd {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  align-content: start;
+  gap: 0.15em;
+  padding-top: 0.6em;
+  margin: 0;
+}
+
+body.meta-page #files .loc {
+  display: flex;
+  width: 0.5em;
+  aspect-ratio: 1;
+  background: var(--color, steelblue);
+  border-radius: 50%;
+}
+
+body.meta-page .language-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2.5rem 3rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  min-height: 0;
+}
+
+body.meta-page .language-breakdown .language-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+}
+
+body.meta-page .language-breakdown .language-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: CanvasText;
+}
+
+body.meta-page .language-breakdown .language-detail {
+  font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+  font-size: 0.95rem;
+  color: CanvasText;
 }
